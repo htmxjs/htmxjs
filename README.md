@@ -1,8 +1,8 @@
 <p align="center"><b>html.js</b></p>
 
-html.js is the server-side js framework for HTML. Build modern hyper-speed web apps and web sites with minimal fuss.
+htmx.js is the server-side js framework for HTMX. Build modern hyper-speed web apps and web sites with minimal fuss.
 
-# What is html.js?
+# What is htmx.js?
 
 A html.js app is server side js that returns html to the browser. It's a back-to-the-future web stack. There are several things that make the html.js approach unique:
 
@@ -23,7 +23,7 @@ I'df you're planning to deploy to Cloudflare Workers, get familiar with the [Wor
 
 # Building your first html.js app
 
-__This tutorial covers the basics of html.js. If you want to see a more feature complete app checkout the [htmljs-todo-example repo](https://github.com/dctanner/htmljs-todo-example).__
+**This tutorial covers the basics of html.js. If you want to see a more feature complete app checkout the [htmljs-todo-example repo](https://github.com/dctanner/htmljs-todo-example).**
 
 # Basic routing and views with Hono
 
@@ -36,23 +36,23 @@ npm create hono@latest my-app
 Now open up src/index.js and let's create a simple app:
 
 ```js
-import { Hono } from 'hono'
-import { html } from 'hono/html'
-import { rootLayout, view } from 'htmljs'
+import { Hono } from 'hono';
+import { html } from 'hono/html';
+import { rootLayout, view } from 'htmxjs';
 
 const db = {
   posts: {
-    1: { title: 'Hello World', body: 'This is my first post' }
-  }
-}
+    1: { title: 'Hello World', body: 'This is my first post' },
+  },
+};
 
-const app = new Hono()
+const app = new Hono();
 
-app.use('*', rootLayout(AppLayout))
-app.get('/post/:id', view(GetBlogPost))
+app.use('*', rootLayout(AppLayout));
+app.get('/post/:id', view(GetBlogPost));
 
 const GetBlogPost = async ({ context }) => {
-  const { id } = context.req.param()
+  const { id } = context.req.param();
   const post = db.posts[id]; // Replace with your own db call
 
   return (
@@ -60,22 +60,22 @@ const GetBlogPost = async ({ context }) => {
       <h1>{post.title}</h1>
       <p>{post.body}</p>
     </article>
-  )
-}
+  );
+};
 
 const AppLayout = ({ context, children }) => html`
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>html.js</title>
-</head>
-  <body>
-    ${props.children}
-  </body>
-</html>
-`
+  <html>
+    <head>
+      <meta charset="UTF-8" />
+      <title>html.js</title>
+    </head>
+    <body>
+      ${props.children}
+    </body>
+  </html>
+`;
 
-export default app
+export default app;
 ```
 
 Take note of a few interesting things here:
@@ -108,19 +108,19 @@ As you app grows, we recommend moving realted jsx functions into their own files
 Now, let's add a list of blog posts to the homepage:
 
 ```js
-app.get('/', view(ListBlogPosts))
+app.get('/', view(ListBlogPosts));
 
 const ListBlogPosts = async ({ context }) => {
   const posts = db.posts; // Replace with your own db call
 
   return (
     <div id="main">
-      {posts.map(post =>
+      {posts.map((post) => (
         <BlogPost post={post} linked={true} />
-      )}
+      ))}
     </div>
-  )
-}
+  );
+};
 ```
 
 ## Adding interactivity with htmx
@@ -138,10 +138,18 @@ Let's change our blog post links to replace the #main div with the response:
 ```js
 const BlogPost = async ({ post, linked }) => (
   <article>
-    <h1>{linked ? <a hx-get={`/post/{post.id}`} hx-target="#main">{post.title}</a> : post.title}</h1>
+    <h1>
+      {linked ? (
+        <a hx-get={`/post/{post.id}`} hx-target="#main">
+          {post.title}
+        </a>
+      ) : (
+        post.title
+      )}
+    </h1>
     <p>{post.body}</p>
   </article>
-)
+);
 ```
 
 But how does the server know when to return the full page including the AppLayout, or just the BlogPost view? That's where our rootLayout(), layout() and view() html.js functions come in. They check for HX-Request, HX-Boosted and HX-Target headers, and appropriately return the full page or just the view.
@@ -149,13 +157,27 @@ But how does the server know when to return the full page including the AppLayou
 We can make our links cleaner by writing a Link jsx function. html.js includes two helpful functions: Link and Form.
 
 ```js
-export const Link = ({ to, "hx-target": hxTarget, "class": className, children }) => {
+export const Link = ({
+  to,
+  'hx-target': hxTarget,
+  class: className,
+  children,
+}) => {
   if (hxTarget) {
-    return html`<a href="${to}" class="${className}" hx-get="${to}" hx-target="${hxTarget}" hx-push-url="true">${children}</a>`
+    return html`<a
+      href="${to}"
+      class="${className}"
+      hx-get="${to}"
+      hx-target="${hxTarget}"
+      hx-push-url="true"
+      >${children}</a
+    >`;
   } else {
-    return html`<a href="${to}" class="${className}" hx-boost="true">${children}</a>`
+    return html`<a href="${to}" class="${className}" hx-boost="true"
+      >${children}</a
+    >`;
   }
-}
+};
 ```
 
 Now you can simply write `<Link to="/post/1" hx-target="#main">Post 1</Link>` and the correct htmx attributes will be added when hxTarget is passed. We also add `hx-push-url="true"` to make the browser history update. You may also want to add `hx-swap` which specifies a [merge strategy for updating the HTML](https://htmx.org/docs/#morphing). We recommend [Idiomorph](https://github.com/bigskysoftware/idiomorph#htmx) lib which requires the `hx-swap="morph"` attribute.

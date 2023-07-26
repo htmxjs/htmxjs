@@ -1,4 +1,4 @@
-import { HtmlJS } from 'htmljs';
+import { HtmlJS } from 'htmxjs';
 
 import { RootLayout, BobLayout } from '@layouts';
 import * as bob from '@routes/bob';

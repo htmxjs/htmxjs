@@ -1,4 +1,4 @@
-import { LayoutFunction, html } from 'htmljs';
+import { LayoutFunction, html } from 'htmxjs';
 
 export const RootLayout: LayoutFunction = ({ children }) => html`
 	<html>

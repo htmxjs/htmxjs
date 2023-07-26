@@ -8,7 +8,7 @@
 		"baseUrl": ".",
 		"paths": {
 			"@*": ["src/*"],
-			"htmljs": ["../../src/htmljs.ts"]
+			"htmxjs": ["../../src/htmxjs.ts"]
 		},
 		"types": ["@cloudflare/workers-types"],
 		"resolveJsonModule": true,

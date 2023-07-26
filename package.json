@@ -1,8 +1,8 @@
 {
-  "name": "htmljs",
+  "name": "htmxjs",
   "version": "1.0.0",
-  "description": "html.js is the server-side js framework for HTML",
-  "main": "src/htmljs.ts",
+  "description": "htmxjs is the server-side js framework for HTMX",
+  "main": "src/htmxjs.ts",
   "keywords": [
     "HTML",
     "HTMX",

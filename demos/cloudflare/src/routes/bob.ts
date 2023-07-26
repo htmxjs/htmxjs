@@ -1,4 +1,4 @@
-import { html, ViewFunction } from 'htmljs';
+import { html, ViewFunction } from 'htmxjs';
 
 export const post: ViewFunction = () => [
 	html`<ul>
