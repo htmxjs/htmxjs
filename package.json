@@ -1,17 +1,29 @@
 {
-  "name": "htmxjs",
+  "name": "@htmxjs/htmxjs",
   "version": "1.0.0",
   "description": "htmxjs is the server-side js framework for HTMX",
-  "main": "src/htmxjs.ts",
+  "main": "htmxjs.ts",
   "keywords": [
     "HTML",
     "HTMX",
     "HONO",
     "TYPESCRIPT"
   ],
-  "author": "",
+  "author": "htmxjs",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/htmxjs/htmxjs/issues"
+  },
+  "homepage": "https://github.com/htmxjs/htmxjs#readme",
   "dependencies": {
     "hono": "^3.3.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/htmxjs/htmxjs.git"
   }
 }
