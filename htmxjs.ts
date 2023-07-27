@@ -1,36 +1,32 @@
-import { Hono } from 'hono';
+import { Hono, Env } from 'hono';
 import { html } from 'hono/html';
 import { Context, Next } from 'hono';
 import { HtmlEscapedString } from 'hono/utils/html';
 export * from 'hono/html';
 export { handle } from 'hono/cloudflare-pages';
 
-type ViewProps = {
-  context: Context;
-};
-type LayoutProps = {
-  context: Context;
-  children: HtmlEscapedString;
-};
 type EndpointResponse =
   | Promise<HtmlEscapedString>
   | HtmlEscapedString
   | Promise<HtmlEscapedString[]>
   | HtmlEscapedString[];
-export type ViewFunction = (props: ViewProps) => EndpointResponse;
-export type LayoutFunction = (props: LayoutProps) => EndpointResponse;
+export type ViewFunction = (context: Context) => EndpointResponse;
+export type LayoutFunction = (
+  children: HtmlEscapedString,
+  context: Context
+) => EndpointResponse;
 
-export class HtmlJS {
-  app: Hono;
+export class HtmlJS<T extends Env> {
+  app: Hono<T>;
 
   constructor(RootLayout: LayoutFunction) {
-    this.app = new Hono();
+    this.app = new Hono<T>();
     this.app.use('*', this.layout(RootLayout, true));
   }
 
   view(viewToRender: ViewFunction) {
     return async (c: Context) => {
-      const newBody = await viewToRender({ context: c });
+      const newBody = await viewToRender(c);
       const newBodyText = Array.isArray(newBody) ? newBody.join('\n') : newBody;
       return c.html(newBodyText);
     };
@@ -54,10 +50,7 @@ export class HtmlJS {
         // To overwrite res, set it to undefined before setting new value
         // https://github.com/honojs/hono/pull/970 released in https://github.com/honojs/hono/releases/tag/v3.1.0
         c.res = undefined;
-        const newBody = await layoutToApply({
-          context: c,
-          children: html(curBody),
-        });
+        const newBody = await layoutToApply(html(curBody), c);
         const newBodyText = Array.isArray(newBody)
           ? newBody.join('\n')
           : newBody;
