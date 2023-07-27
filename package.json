@@ -1,6 +1,6 @@
 {
   "name": "htmxjs",
-  "version": "1.0.2",
+  "version": "1.0.5",
   "description": "htmxjs is the server-side js framework for HTMX",
   "main": "htmxjs.ts",
   "keywords": [
