@@ -5,20 +5,21 @@ import { HtmlEscapedString } from 'hono/utils/html';
 export * from 'hono/html';
 export * from 'hono/jsx';
 export { handle } from 'hono/cloudflare-pages';
-export type { HonoRequest as HtmxJsRequest } from 'hono';
 
 type EndpointResponse =
-  | Promise<HtmlEscapedString>
+  | Promise<HtmlEscapedString | HtmlEscapedString[]>
   | HtmlEscapedString
-  | Promise<HtmlEscapedString[]>
   | HtmlEscapedString[];
 export type ViewFunction = (props: { context: Context }) => EndpointResponse;
 export type LayoutFunction = (props: {
   context: Context;
   children: HtmlEscapedString;
 }) => EndpointResponse;
+type P = string;
+export type HtmxJsContext = Context;
+
 export const htmlRaw = String.raw;
-export class HtmlJS<T extends Env> {
+export class HtmxJS<T extends Env> {
   app: Hono<T>;
 
   constructor(RootLayout: LayoutFunction) {
