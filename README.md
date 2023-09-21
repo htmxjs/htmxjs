@@ -88,7 +88,7 @@ Let's improve the code by separating out the jsx GetBlogPost returns into a new 
 ```js
 const BlogPost = async ({ post, linked }) => (
   <article>
-    <h1>{linked ? <a href={`/post/{post.id}`}>{post.title}</a> : post.tit;e}</h1>
+    <h1>{linked ? <a href={`/post/{post.id}`}>{post.title}</a> : post.title}</h1>
     <p>{post.body}</p>
   </article>
 )
