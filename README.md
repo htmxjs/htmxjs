@@ -1,4 +1,4 @@
-<p align="center"><b>html.js</b></p>
+<p align="center"><b>htmx.js</b></p>
 
 htmx.js is the server-side js framework for HTMX. Build modern hyper-speed web apps and web sites with minimal fuss.
 
